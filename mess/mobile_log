@@ -1,0 +1,99 @@
+预登录，获取servertime & nonce参数(用来加密生成密码)
+加密获得密码<af8a41c89a94ac63e1e92f39408ab2060d681b5e>
+登录成功！
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="" />
+<title>登录 新浪微博-随时随地分享身边的新鲜事儿</title>
+<meta http-equiv=X-UA-Compatible content=IE=EmulateIE7 />
+<meta name="msapplication-tooltip" content="新浪微博" />
+<meta name="msapplication-window" content="width=1024;height=768" />
+<meta name="msapplication-task" content="name=新浪微博; action-uri=/; icon-uri=http://img1.t.sinajs.cn/t35/style/images/common/favicon/home.ico" />
+<meta name="msapplication-task" content="name=我的微博; action-uri=/profile/1744833900; icon-uri=http://img1.t.sinajs.cn/t35/style/images/common/favicon/mypage.ico" />
+<meta name="msapplication-task" content="name=微博广场; action-uri=/pub/?source=toptray; icon-uri=http://img1.t.sinajs.cn/t35/style/images/common/favicon/square.ico" />
+<meta content="#2994ce" name="msapplication-navbutton-color" />
+<meta name="msapplication-starturl" content="./" />
+
+<script type="text/javascript">
+var $CONFIG = {
+	$lang			: "zh",
+	$oid			: "1744833900",
+	$uid			: "1744833900",
+	$severtime		: "1335970528",
+	$token			: "fe5f0b88714478c216f0c4c387f9d5e9",
+	$str_uid		: "",
+	$product		: "miniblog",
+	$pageid			: "login",
+	$cuser_status	: "full",
+	$skin			: "skin_001",
+	$domain         : "weibo.com/316860006",
+	$FW			    : "0"
+	
+};
+var scope = $CONFIG;
+scope.version = "20120502165827";
+</script><link href="http://img.t.sinajs.cn/t35/style/css/register/login.css?version=20120502165827" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="http://js.t.sinajs.cn/t35/miniblog/js/lang_zh.js?version=20120502165827"></script>
+<script src="http://js.t.sinajs.cn/STK/js/gaea.js?version=20120502165827" charset="utf-8" type="text/javascript"></script>
+</head>
+
+<body style=" background:#C4EFF4 url(http://simg.sinajs.cn/miniblog/images/common/login/zlogin3.jpg) no-repeat center 461px">
+<div class="loginWarp">
+  <div class="warpB1"></div>
+  <div class="warpC">
+    <div class="loginMain">
+
+      <div class="loginMain2" id="login_form">
+        <div class="shield_tips" style="margin-bottom:10px;"><!--本提示文字不会跟立即注册同时出现-->
+          <p class="tip_account font_14 fb gray6">您正在使用497052184@qq.com登录</p>
+          <p class="tip_text gray9">根据您的设置，在登录微博前需要填写验证码完成登录。请将图片中的字符填写到下框中。（不区分大小写）</p>
+          <input type="hidden" name='call_back' id="call_back" value="http://weibo.com/messages?topnav=1&amp;wvr=3.6&amp;ajaxpagelet=1&amp;_t=1335969631369" />
+        </div>
+        <table class="loginTable">
+          <tr>
+            <th style="height:30px;">&nbsp;</th>
+            <td class="yzm" id="pincode_tip" style="color:red;"></td>
+          </tr>
+          <tr>
+            <th style="height:30px;">验证码：</th>
+            <td>
+				<div class="input_code">
+					<input type="text" id="pincode" name="pincode">
+					<img width="100" height="32" id="check_img"><a id="changePincode" href="javascript:void(0);">换一换</a>
+
+				</div>
+			</td>
+          </tr>
+        </table>
+        <p style="margin:7px 0 0 67px"><a href="javascript:;" id="login_submit_btn" style="float:left"><img src="http://simg.sinajs.cn/miniblog/images/common/login/btn.jpg" /></a><span class="login_submit_btnnotclick" id="vdun_submit2" style="display: none;"></span> <span class="sj">手机访问 <a href="http://news.sina.com.cn/wap/wbk.html">http://t.sina.cn</a></span></p>
+      </div>
+    </div>
+
+  </div>
+     <div class="bottomLinks">
+    	<div class="MIB_foot_new MIB_txtbr MIB_linkbr">
+            <div class="lf">
+                <p class="p1"><a href="http://help.sina.com.cn/p/i_12.html" target="_blank">帮助</a><a href="http://weibo.com/k/weijianyi" target="_blank">意见反馈</a><a href="http://weibo.com/pub/verified" target="_blank">微博认证及合作</a><a href="http://news.sina.com.cn/guide/" target="_blank">新浪网导航</a><a href="http://weibo.com/complaint/complaint.php?url=" target="_blank">不良信息举报</a></p>
+                <p>客服电话：400 690 0000 提示音后按1键 (按当地市话标准计费)</p>
+                <p class="p1">北京微梦创科网络技术有限公司　<a href="http://weibo.com/licence/jww.html" target="_blank">京网文[2011]0398-130号</a><a href="http://www.miibeian.gov.cn" target="_blank">京ICP证100780号</a></p>
+            </div>
+            <div class="rt">
+               <p>
+             语言：
+             <select id="lang_select" onchange="location.href=this.value">
+                 <option value="/sguide/vdun?entry=miniblog&act=validatevsn&url=http%3A%2F%2Fweibo.com%2Fmessages%3Ftopnav%3D1%26wvr%3D3.6%26ajaxpagelet%3D1%26_t%3D1335969631369&lang=zh-cn" selected="selected">中文(简体)</option>
+                 <option value="/sguide/vdun?entry=miniblog&act=validatevsn&url=http%3A%2F%2Fweibo.com%2Fmessages%3Ftopnav%3D1%26wvr%3D3.6%26ajaxpagelet%3D1%26_t%3D1335969631369&lang=zh-tw" >中文(繁体)</option>
+             </select>
+            </p>
+                <p>Copyright &copy; 1996-2011 SINA</p>
+            </div>
+            <div class="clearit"></div>
+        </div>
+    </div>
+</div>
+<script src="http://js.t.sinajs.cn/t4/apps/secure/static/language/security/zh-cn.js?version=20120502165827" charset="utf-8" type="text/javascript"></script>
+<script src="http://js.t.sinajs.cn/t4/apps/secure/js/login/check_pincode.js?version=20120502165827" charset="utf-8" type="text/javascript"></script>
+</body>
+</html>
