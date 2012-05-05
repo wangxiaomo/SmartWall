@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import re
+import config
 from lib.SQLite import SQLite
 
 def log(mesg):
@@ -12,7 +13,7 @@ def sql_escape(string):
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \
         (message["src"], message["dst"], message["message"], message["time"])
-    db = SQLite()
+    db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
     if rows:
         return True
@@ -20,7 +21,7 @@ def is_message_exists(message):
         return False
 
 def save_2_sqlite(messages):
-    db = SQLite()
+    db = SQLite(config.DB_FILE)
     count = 0
     for message in messages:
         if is_message_exists(message):

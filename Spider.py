@@ -25,8 +25,8 @@ class Spider():
             with open(".gsid") as f:
                 self.gsid = f.read().rstrip()
         except:
-            pass   
-        #TODO
+            log("Haven't Been Authorizationed!")
+            self.try_login(config.USERNAME, config.PASSWORD)
 
     def _request(self, url, bodies={}, headers={}):
         log("request %s!" % url)
@@ -160,12 +160,6 @@ class Spider():
             ret.append(msg)
         return ret
 
-USERNAME = "497052184@qq.com"
-PASSWORD = "Wj2201367"
-s = Spider()
-s.run()
-
-
-"""
-目前写的是使用密文传输密码。
-"""
+if __name__ == '__main__':
+    s = Spider()
+    s.run()
