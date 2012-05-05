@@ -124,15 +124,15 @@ class Spider():
         for conversation in conversations:
             item = {}
             people = re.findall(r'<span class="cmt">(.*?)</span>', conversation)[0]
-            people = re.sub(r'<a(?:.*?)>(.*?)</a>', lambda m: m.group(1), people)
-            people = re.sub(r'<img(?:.*?)/>', '', people)
+            people = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), people) # 去除html成对标记
+            people = re.sub(r'<(?:.*?)/>', '', people) # 去除html单向标记
             people = re.split(r'&nbsp;', people)
             latest = re.findall(r'(?:</span>)(.*?)(?=<span)', conversation)[0]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
             detail = re.findall(r'<a href="(.*?)" class="cc">(?:.*?)</a>', conversation)[1]
             detail = parser.unescape(detail)
             count = re.findall(r'共(\d+)条对话', conversation)[0]
-            item.update(dict(p1=people[0],p2=people[1],latest=latest,time=time,detail=detail,count=count))
+            item.update(dict(p1=people[0],p2=people[2],latest=latest,time=time,detail=detail,count=count))
             ret.append(item)
 
         return ret
@@ -144,8 +144,9 @@ class Spider():
         for conversation in conversations:
             msg = {}
             people = re.findall(r'<span class="cmt">(.*?)</span>', conversation)[0]
-            people = re.sub(r'<a(?:.*?)>(.*?)</a>', lambda m: m.group(1), people)
-            people = re.sub(r'<img(?:.*?)/>', '', people)
+            people = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), people)
+            people = re.sub(r'<(?:.*?)/>', '', people)
+            people = re.sub(r'[:]', '', people)
             message = re.findall(r'(?:</span>)(.*?)(?=<span)', conversation)[0]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
 
