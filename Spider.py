@@ -8,12 +8,7 @@ import cookielib
 import urllib,urllib2
 import Helper
 
-def log(msg):
-    print msg
-
-def show_data(table):
-    for k in table.keys():
-        print k, table[k]
+log = Helper.log
 
 class Spider():
     def __init__(self):
@@ -44,7 +39,7 @@ class Spider():
 
     def try_login(self, username, password):
         if self.gsid:
-            print "Already Authorizationed!Will overwrite it!"
+            log("Already Authorizationed!Will overwrite it!")
         login_page = self._request(LOGIN_URL).read()
         try:
             if re.search(r'form action', login_page):
@@ -64,9 +59,8 @@ class Spider():
         post_data["mobile"] = username
         post_data["password_%s" % vk_num] = password
         log("build auth header success!")       
-        show_data(post_data)
+
         auth_page = self._request(submit_url, post_data).read()
-        print auth_page
         try:
             #redirect_url = re.findall(r'go href="(.*?)"', auth_page)[0]
             #wap 方式传送回来的结果受明文/密文传送的影响，返回<a>或<go>。所以直接提取gsid来判断登陆是否成功
@@ -75,7 +69,6 @@ class Spider():
             raise Exception("login failed!")
         #message_url = "http://weibo.cn/msg/?tf=5_010&vt=4&gsid=%s" % gsid
         #message_page = self._request_over_robots(message_url).read()
-        #print message_page
         self.user = username
         return self.save_gsid(gsid)
 
@@ -123,40 +116,43 @@ class Spider():
         ret = []
         for conversation in conversations:
             item = {}
-            people = re.findall(r'<span class="cmt">(.*?)</span>', conversation)[0]
-            people = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), people) # 去除html成对标记
-            people = re.sub(r'<(?:.*?)/>', '', people) # 去除html单向标记
-            people = re.split(r'&nbsp;', people)
-            latest = re.findall(r'(?:</span>)(.*?)(?=<span)', conversation)[0]
+            tokens = re.findall(r'(.*?)<span', conversation)[0]
+            tokens = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), tokens) # 去除html成对标记
+            tokens = re.sub(r'<(?:.*?)/>', '', tokens) # 去除html单向标记
+            tokens = re.sub(r'\[在线\]', '', tokens) # 去除在线标记
+            tokens = re.split(r'&nbsp;', tokens)
+            latest = tokens[3]
+            latest = re.split(r':', latest)[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
-            detail = re.findall(r'<a href="(.*?)" class="cc">(?:.*?)</a>', conversation)[1]
+            detail = re.findall(r'语音通话(?:.*?)<a href="(.*?)" class="cc">(?:.*?)</a>', conversation)[0]
             detail = parser.unescape(detail)
             count = re.findall(r'共(\d+)条对话', conversation)[0]
-            item.update(dict(p1=people[0],p2=people[2],latest=latest,time=time,detail=detail,count=count))
+            item.update(dict(p1=tokens[0],p2=tokens[2],latest=latest,time=Helper.datetime_formater(time),detail=detail,count=count))
             ret.append(item)
 
         return ret
 
     def get_messages(self, html, peoples):
-        conversations = re.findall("<div class=\"c\">(.*?)</div>(?=<div class=\"(?:[cs])\"\>)", html)
-        conversations = conversations[2:-1]
+        conversations = re.findall("<div class=\"c\">(.*?)</div>", html)
+        conversations = conversations[1:-3]
         ret = []
         for conversation in conversations:
             msg = {}
-            people = re.findall(r'<span class="cmt">(.*?)</span>', conversation)[0]
-            people = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), people)
-            people = re.sub(r'<(?:.*?)/>', '', people)
-            people = re.sub(r'[:]', '', people)
-            message = re.findall(r'(?:</span>)(.*?)(?=<span)', conversation)[0]
+            tokens = re.findall(r'(.*?)<span', conversation)[0]
+            tokens = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), tokens) # 去除html成对标记
+            tokens = re.sub(r'<(?:.*?)/>', '', tokens) # 去除html单向标记
+            tokens = re.sub(r'\[在线\]', '', tokens) # 去除在线标记
+            tokens = re.split(r':', tokens)
+            people = tokens[0]
+            message = tokens[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
-
             if people == peoples[0]:
                 msg["dst"] = peoples[1]
             else:
                 msg["dst"] = peoples[0]
             msg["src"] = people
             msg["message"] = Helper.sql_escape(message)
-            msg["time"] = time
+            msg["time"] = Helper.datetime_formater(time)
             ret.append(msg)
         return ret
 

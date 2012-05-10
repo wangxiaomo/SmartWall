@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-import re
+import re,time
 import config
 from lib.SQLite import SQLite
 
@@ -32,3 +32,27 @@ def save_2_sqlite(messages):
         db.do_sql(sql)
 
     log("%d messages existed!" % count)
+
+def drop_table(table_name='sw_messages'):
+    sql = "DELETE FROM %s" % table_name
+    db = SQLite(config.DB_FILE)
+    db.do_sql(sql)
+
+
+def datetime_formater(date_string):
+    """ datetime formater """
+    if re.match(r'\d{4}(-\d{2}){2} \d{2}:\d{2}:\d{2}',date_string):
+        return date_string
+    else:
+        if re.match(r'今天', date_string):
+            date_str = time.strftime("%Y-%m-%d", time.localtime())
+        else:
+            year = time.strftime("%Y", time.localtime())
+            month = re.findall(r'(\d{2})月', date_string)[0]
+            day = re.findall(r'(\d{2})日', date_string)[0]
+            date_str = "%s-%s-%s" % (year, month, day)
+        time_str = re.findall(r'(\d{2}:\d{2})', date_string)[0]
+        return "%s %s:00" % (date_str, time_str)
+
+if __name__ == '__main__':
+    drop_table()
