@@ -12,6 +12,8 @@ log = Helper.log
 
 class Spider():
     def __init__(self):
+        self.last_time = self.get_last_message_time()
+        log("get last time %s" % self.last_time)
         self.cj = cookielib.LWPCookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
         urllib2.install_opener(self.opener)
@@ -88,11 +90,16 @@ class Spider():
             raise Exception("got an error!")
         log("TOTAL_PAGE_COUNT: %s" % total_page_count)
         page_index = 1
-        conversations = self.get_conversations(message_page)
+        conversations,_ = self.get_conversations(message_page)
+        self.latest_time = conversations[0]["time"]
+        log("get latest time %s" % self.latest_time)
 
         while page_index<total_page_count:
             page_index += 1
-            conversations.extend(self.fetch_conversations(page_index))
+            cnt_pages_conversations,status = self.fetch_conversations(page_index)
+            conversations.extend(cnt_pages_conversations)
+            if status:
+                break
         log("Total %d Conversations!" % len(conversations))
 
         messages = []
@@ -102,6 +109,7 @@ class Spider():
             message_page = self._request(BASE_URL+detail).read()
             messages.extend(self.get_messages(message_page, peoples))
         log("Messages Total %d Counts!" % len(messages))
+        self.set_last_message_time(self.latest_time)
         Helper.save_2_sqlite(messages)
 
     def fetch_conversations(self, page_index=1):
@@ -110,6 +118,7 @@ class Spider():
         return self.get_conversations(message_page)
 
     def get_conversations(self, html):
+        status = 0
         conversations = re.findall("<div class=\"c\">(.*?)</div>(?=<div class=\"(?:[cs])\"\>)", html)
         conversations = conversations[1:-2]
         parser = HTMLParser.HTMLParser()
@@ -124,13 +133,18 @@ class Spider():
             latest = tokens[3]
             latest = re.split(r':', latest)[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
+            time = Helper.datetime_formater(time)
+            cnt_datetime = Helper.str2date(time)
+            if not cnt_datetime>self.last_time:
+                status = 1
+                return ret,status
             detail = re.findall(r'语音通话(?:.*?)<a href="(.*?)" class="cc">(?:.*?)</a>', conversation)[0]
             detail = parser.unescape(detail)
             count = re.findall(r'共(\d+)条对话', conversation)[0]
-            item.update(dict(p1=tokens[0],p2=tokens[2],latest=latest,time=Helper.datetime_formater(time),detail=detail,count=count))
+            item.update(dict(p1=tokens[0],p2=tokens[2],latest=latest,time=time,detail=detail,count=count))
             ret.append(item)
 
-        return ret
+        return ret,status
 
     def get_messages(self, html, peoples):
         conversations = re.findall("<div class=\"c\">(.*?)</div>", html)
@@ -146,15 +160,25 @@ class Spider():
             people = tokens[0]
             message = tokens[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
+            time = Helper.datetime_formater(time)
+            cnt_datetime = Helper.str2date(time)
+            if not cnt_datetime>self.last_time:
+                return ret
             if people == peoples[0]:
                 msg["dst"] = peoples[1]
             else:
                 msg["dst"] = peoples[0]
             msg["src"] = people
             msg["message"] = Helper.sql_escape(message)
-            msg["time"] = Helper.datetime_formater(time)
+            msg["time"] = time
             ret.append(msg)
         return ret
+
+    def get_last_message_time(self):
+        return Helper.str2date(Helper.get_app_value('message_time'))
+
+    def set_last_message_time(self, timestr):
+        Helper.set_app_value('message_time', timestr)
 
 if __name__ == '__main__':
     s = Spider()

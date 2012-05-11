@@ -10,8 +10,18 @@ def log(mesg):
 def sql_escape(string):
     return string.replace('\\', '\\\\').replace('\'', '\'\'')
 
-def str2date(string):
-    return datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
+def set_app_value(cfg_name, cfg_value):
+    """set cfg_name's value."""
+    sql = "UPDATE sw_app SET cfg_value='%s' WHERE cfg_name='%s'" % (cfg_value, cfg_name)
+    db = SQLite(config.DB_FILE)
+    db.do_sql(sql)
+
+def get_app_value(cfg_name):
+    """get cfg_name's value."""
+    sql = "SELECT cfg_value FROM sw_app WHERE cfg_name='%s'" % cfg_name
+    db = SQLite(config.DB_FILE)
+    rows = db.fetch_sql(sql)
+    return rows[0][0]
 
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \
@@ -41,7 +51,6 @@ def drop_table(table_name='sw_messages'):
     db = SQLite(config.DB_FILE)
     db.do_sql(sql)
 
-
 def datetime_formater(date_string):
     """ datetime formater """
     if re.match(r'\d{4}(-\d{2}){2} \d{2}:\d{2}:\d{2}',date_string):
@@ -56,6 +65,9 @@ def datetime_formater(date_string):
             date_str = "%s-%s-%s" % (year, month, day)
         time_str = re.findall(r'(\d{2}:\d{2})', date_string)[0]
         return "%s %s:00" % (date_str, time_str)
+
+def str2date(string):
+    return datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 if __name__ == '__main__':
     drop_table()
