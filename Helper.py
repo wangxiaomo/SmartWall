@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-import re,time
+import re,time,datetime
 import config
 from lib.SQLite import SQLite
 
@@ -9,6 +9,9 @@ def log(mesg):
 
 def sql_escape(string):
     return string.replace('\\', '\\\\').replace('\'', '\'\'')
+
+def str2date(string):
+    return datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \
