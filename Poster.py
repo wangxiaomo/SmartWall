@@ -82,7 +82,6 @@ class Poster():
             else:
                 school = '未知'
             user.update(dict(id=user_id, name=screen_name, sex=gender, school=school))
-            print user
             return user
         except:
             raise
