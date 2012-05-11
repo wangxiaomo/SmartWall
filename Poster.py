@@ -50,12 +50,24 @@ class Poster():
             pickle.dump(self.token, f)
         log("pickle saved success!")
 
-    def post(self, status):
+    def post_status(self, status):
         try:
             self.api.update_status(status=status)
         except:
             raise Exception("Post Status Failed!")
 
+    def get_user_info(self, screen_name):
+        try:
+            ret = self.api.get_user(screen_name=screen_name)
+            ds = dir(ret)
+            r = ret.status
+            for w in dir(r):
+                if not w.startswith('_'):
+                    print r.__getattribute__(w)
+        except:
+            raise Exception("%s user not find" % screen_name)
+            
+
 if __name__ == '__main__':
     poster = Poster()
-    poster.post("This is a Test!")
+    poster.get_user_info("小默的研究中心")
