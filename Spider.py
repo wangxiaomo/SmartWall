@@ -4,8 +4,7 @@ BASE_URL = "http://weibo.cn"
 LOGIN_URL = "http://3g.sina.com.cn/prog/wapsite/sso/login.php?backURL=http%3A%2F%2Fweibo.cn%2F%3Fgotoreg%3D1%26from%3Dindex%26s2w%3Dindex%26pos%3D103&backTitle=%D0%C2%C0%CB%CE%A2%B2%A9&vt=4&revalid=2&ns=1"
 
 import re,HTMLParser
-import cookielib
-import urllib,urllib2
+import urllib, urllib2
 import Helper
 
 log = Helper.log
@@ -14,10 +13,6 @@ class Spider():
     def __init__(self):
         self.last_time = self.get_last_message_time()
         log("get last time %s" % self.last_time)
-        self.cj = cookielib.LWPCookieJar()
-        self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
-        urllib2.install_opener(self.opener)
-        log("build opener success!")
         try:
             with open(".gsid") as f:
                 self.gsid = f.read().rstrip()
@@ -36,8 +31,8 @@ class Spider():
             request = urllib2.Request(url, urllib.urlencode(bodies))
             request.add_header('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:12.0) Gecko/20100101 Firefox/12.0')
         except:
-            pass
-        return self.opener.open(request)
+            raise Exception("build request error!")
+        return urllib2.urlopen(request)
 
     def try_login(self, username, password):
         if self.gsid:
@@ -91,6 +86,9 @@ class Spider():
         log("TOTAL_PAGE_COUNT: %s" % total_page_count)
         page_index = 1
         conversations,_ = self.get_conversations(message_page)
+        if len(conversations) == 0:
+            log("Already up to date")
+            return
         self.latest_time = conversations[0]["time"]
         log("get latest time %s" % self.latest_time)
 
