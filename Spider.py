@@ -7,8 +7,8 @@ LOGIN_URL = "http://3g.sina.com.cn/prog/wapsite/sso/login.php?backURL=http%3A%2F
 import re,HTMLParser
 import urllib, urllib2
 import config
-import Poster
 import Helper
+from Poster import Poster
 
 log = Helper.log
 
@@ -108,13 +108,15 @@ class Spider():
         for conversation in conversations:
             user = conversation["p2"] if conversation["p1"] == '我' else conversation["p1"]
             user_info = poster.get_user_info(user)
-            Helper.add_user(user_info)
+            flag = Helper.add_user(user_info)
+            if flag == False:
+                continue
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
             message_page = self._request(BASE_URL+detail).read()
             messages.extend(self.get_messages(message_page, peoples))
-        log("Messages Total %d Counts!" % len(messages))
         self.set_last_message_time(self.latest_time)
+        log("Final Message Count %d" % len(messages))
         Helper.save_2_sqlite(messages)
 
     def fetch_conversations(self, page_index=1):
@@ -133,7 +135,7 @@ class Spider():
             tokens = re.findall(r'(.*?)<span', conversation)[0]
             tokens = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), tokens) # 去除html成对标记
             tokens = re.sub(r'<(?:.*?)/>', '', tokens) # 去除html单向标记
-            tokens = re.sub(r'\[在线\]', '', tokens) # 去除在线标记
+            tokens = re.sub(r'\[(在线|忙碌|离开)\]', '', tokens) # 去除在线标记
             tokens = re.split(r'&nbsp;', tokens)
             latest = tokens[3]
             latest = re.split(r':', latest)[1]
@@ -160,7 +162,7 @@ class Spider():
             tokens = re.findall(r'(.*?)<span', conversation)[0]
             tokens = re.sub(r'<(?:.*?)>(.*?)</(?:.*?)>', lambda m: m.group(1), tokens) # 去除html成对标记
             tokens = re.sub(r'<(?:.*?)/>', '', tokens) # 去除html单向标记
-            tokens = re.sub(r'\[在线\]', '', tokens) # 去除在线标记
+            tokens = re.sub(r'\[(在线|忙碌|离开)\]', '', tokens) # 去除在线标记
             tokens = re.split(r':', tokens)
             people = tokens[0]
             message = tokens[1]

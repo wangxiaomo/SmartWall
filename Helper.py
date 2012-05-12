@@ -33,11 +33,16 @@ def is_user_exists(screen_name):
         return False
 
 def add_user(user):
-    if is_user_exists(user["name"]):
-        sql = "INSERT INTO sw_users(user_id, screen_name, sex, school) VALUES('%s', '%s', '%s', '%s')" \
-            % (user["id"],user["name"],user["sex"],user["school"])
-        db = SQLite(config.DB_FILE)
-        db.do_sql(sql)
+    try:
+        if not is_user_exists(user["name"]):
+            sql = "INSERT INTO sw_users(user_id, screen_name, sex, school) VALUES('%s', '%s', '%s', '%s')" \
+                % (user["id"],user["name"],user["sex"],user["school"])
+            db = SQLite(config.DB_FILE)
+            db.do_sql(sql)
+            log("add user %s!" % user["name"])
+            return True
+    except:
+        return False
 
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \

@@ -75,17 +75,18 @@ class Poster():
             request = urllib2.Request(url)
             request.add_header('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:12.0) Gecko/20100101 Firefox/12.0')
             html = urllib2.urlopen(request).read()
-            if re.match(r'哈尔滨工业大学|哈工大威海|哈工大（威海）|哈工大(威海)', html):
+            if re.search(r'哈尔滨工业大学|哈工大（威海）|哈工大\(威海\)', html):
                 school = '哈工大'
-            elif re.match(r'山东大学|山大（威海）|山大(威海)', html):
+            elif re.search(r'山东大学|山大（威海）|山大\(威海\)', html):
                 school = '山大'
             else:
                 school = '未知'
             user.update(dict(id=user_id, name=screen_name, sex=gender, school=school))
             return user
         except:
-            raise
+            log("Exception Caught Here.User: %s" % screen_name)
 
 if __name__ == '__main__':
     poster = Poster()
-    poster.get_user_info("梦逝去的方向")
+    user = poster.get_user_info("梦逝去的方向")
+    print user["school"]

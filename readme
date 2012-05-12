@@ -34,3 +34,6 @@ update:2012/05/11 by oangeor
         ---reply by xiaomo
             1.用户信息根据weibo py来抓.我周末实现.具体的格式确定了就可以了.
             2.先让它运行起来.关于分析的东西慢慢加或者说根据情况加.
+
+update:2012/05/12 by xiaomo
+TODO: Fix 2级递归搜索..
