@@ -1,10 +1,13 @@
 #-*- coding: utf-8 -*-
 
 BASE_URL = "http://weibo.cn"
+LOGIN_BASE = "http://3g.sina.com.cn/prog/wapsite/sso"
 LOGIN_URL = "http://3g.sina.com.cn/prog/wapsite/sso/login.php?backURL=http%3A%2F%2Fweibo.cn%2F%3Fgotoreg%3D1%26from%3Dindex%26s2w%3Dindex%26pos%3D103&backTitle=%D0%C2%C0%CB%CE%A2%B2%A9&vt=4&revalid=2&ns=1"
 
 import re,HTMLParser
 import urllib, urllib2
+import config
+import Poster
 import Helper
 
 log = Helper.log
@@ -35,14 +38,13 @@ class Spider():
         return urllib2.urlopen(request)
 
     def try_login(self, username, password):
-        if self.gsid:
-            log("Already Authorizationed!Will overwrite it!")
         login_page = self._request(LOGIN_URL).read()
+        parser = HTMLParser.HTMLParser()
         try:
             if re.search(r'form action', login_page):
-                submit_url = BASE_URL+"/"+re.findall(r'form action="(.*?)"', login_page)[0]
+                submit_url = LOGIN_BASE + "/"+parser.unescape(re.findall(r'form action="(.*?)"', login_page)[0])
             else:
-                submit_url = BASE_URL+"/"+re.findall(r'go href="(.*?)"', login_page)[0]
+                submit_url = LOGIN_BASE+"/"+parser.unescape(re.findall(r'go href="(.*?)"', login_page)[0])
         except:
             raise Exception("can not get the submit url.")
         post_data = {}
@@ -61,7 +63,7 @@ class Spider():
         try:
             #redirect_url = re.findall(r'go href="(.*?)"', auth_page)[0]
             #wap 方式传送回来的结果受明文/密文传送的影响，返回<a>或<go>。所以直接提取gsid来判断登陆是否成功
-            gsid = re.findall(r'gsid=(.*?)&amp;', auth_page)[0]
+            gsid = re.findall(r'g=(.*?)&amp;', auth_page)[0]
         except:
             raise Exception("login failed!")
         #message_url = "http://weibo.cn/msg/?tf=5_010&vt=4&gsid=%s" % gsid
@@ -99,9 +101,14 @@ class Spider():
             if status:
                 break
         log("Total %d Conversations!" % len(conversations))
+        #TODO:base on the conversation here. we can add userinfo into the database
+        poster = Poster()
 
         messages = []
         for conversation in conversations:
+            user = conversation["p2"] if conversation["p1"] == '我' else conversation["p1"]
+            user_info = poster.get_user_info(user)
+            Helper.add_user(user_info)
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
             message_page = self._request(BASE_URL+detail).read()

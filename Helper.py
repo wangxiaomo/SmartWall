@@ -23,6 +23,22 @@ def get_app_value(cfg_name):
     rows = db.fetch_sql(sql)
     return rows[0][0]
 
+def is_user_exists(screen_name):
+    sql = "SELECT * FROM sw_users WHERE screen_name='%s'" % screen_name
+    db = SQLite(config.DB_FILE)
+    rows = db.fetch_sql(sql)
+    if rows:
+        return True
+    else:
+        return False
+
+def add_user(user):
+    if is_user_exists(user["name"]):
+        sql = "INSERT INTO sw_users(user_id, screen_name, sex, school) VALUES('%s', '%s', '%s', '%s')" \
+            % (user["id"],user["name"],user["sex"],user["school"])
+        db = SQLite(config.DB_FILE)
+        db.do_sql(sql)
+
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \
         (message["src"], message["dst"], message["message"], message["time"])
