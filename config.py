@@ -23,4 +23,4 @@ TOKEN_FILE = ".tokens"
 
 # Please Change These!
 USERNAME = '497052184@qq.com'
-PASSWORD = 'Wj2201367'
+PASSWORD = 'xxx'
