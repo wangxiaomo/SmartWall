@@ -50,7 +50,7 @@ def get_status(last_post_time):
     rows = db.fetch_sql(sql)
     # write the time back
     now = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S") 
-    sql = "UPDATE sw_app SET post_time='%s'" % now
+    sql = "UPDATE sw_app SET cfg_value='%s' WHERE cfg_name='post_time'" % now
     db.do_sql(sql)
     return rows
     
