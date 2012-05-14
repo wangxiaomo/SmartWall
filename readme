@@ -37,3 +37,12 @@ update:2012/05/11 by oangeor
 
 update:2012/05/12 by xiaomo
 TODO: Fix 2级递归搜索..
+
+update:2012/05/14 by xiaomo
+version1. 最近有点紧啊.ps.杨春程那个混蛋貌似比我还忙的样子.总之先把第一版本搞出来再说.
+说下使用方法吧:
+    1.git clone下来后先修改config.py.填写自己的微博账户密码.
+    2.执行 make init.等待初始化,过程中会让输入 OAuth PIN 码,后期如果需要的话可以把我之前写的 AutoPIN 加进来.
+    3.初始化完毕就可以通过 python Spider.py 来抓取私信.
+    4.初始化完毕就可以通过 python Poster.py 来发送微博.
+    5.make clean 可以删除 pyc 文件.make init_db 可以初始化数据库.make clean_all 可以删除所有配置文件.
