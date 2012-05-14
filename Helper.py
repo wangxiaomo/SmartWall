@@ -44,8 +44,15 @@ def add_user(user):
     except:
         return False
 
+def get_status(last_post_time):
+    sql = "SELECT sex,school,message FROM sw_messages,sw_users WHERE src!='%s' AND src=screen_name AND pub_time>'%s' ORDER BY pub_time" % ('我'.decode('utf-8'),last_post_time)
+    db = SQLite(config.DB_FILE)
+    rows = db.fetch_sql(sql)
+    return rows
+    
+
 def is_message_exists(message):
-    sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND time='%s'" % \
+    sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND pub_time='%s'" % \
         (message["src"], message["dst"], message["message"], message["time"])
     db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
@@ -61,8 +68,9 @@ def save_2_sqlite(messages):
         if is_message_exists(message):
             count += 1
             continue
-        sql = "INSERT INTO sw_messages(src,dst,message,time) VALUES('%s', '%s', '%s', '%s')" % \
+        sql = "INSERT INTO sw_messages(src,dst,message,pub_time) VALUES('%s', '%s', '%s', '%s')" % \
             (message["src"], message["dst"], message["message"], message["time"])
+        log(sql)
         db.do_sql(sql)
 
     log("%d messages existed!" % count)
@@ -74,9 +82,9 @@ def drop_table(table_name='sw_messages'):
 
 def datetime_formater(date_string):
     """ datetime formater """
-    if re.match(r'\d{4}(-\d{2}){2} \d{2}:\d{2}:\d{2}',date_string):
+    if re.search(r'\d{4}(-\d{2}){2} \d{2}:\d{2}:\d{2}',date_string):
         return date_string
-    else:
+    elif re.search(r'今天', date_string):
         if re.match(r'今天', date_string):
             date_str = time.strftime("%Y-%m-%d", time.localtime())
         else:
@@ -86,6 +94,12 @@ def datetime_formater(date_string):
             date_str = "%s-%s-%s" % (year, month, day)
         time_str = re.findall(r'(\d{2}:\d{2})', date_string)[0]
         return "%s %s:00" % (date_str, time_str)
+    else:
+        mins_ago = re.findall(r'(\d{1,})分钟前', date_string)[0]
+        d = datetime.datetime.now()-datetime.timedelta(minutes=int(mins_ago))
+        return datetime.datetime.strftime(d, "%Y-%m-%d %H:%M:%S")
+        
+        
 
 def str2date(string):
     return datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")

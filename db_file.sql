@@ -4,7 +4,7 @@ CREATE TABLE "SW_messages" (
     "src" TEXT NOT NULL,
     "dst" TEXT NOT NULL,
     "message" TEXT NOT NULL,
-    "time" TEXT NOT NULL
+    "pub_time" TEXT NOT NULL
 );
 CREATE TABLE "sw_app" (
     "cfg_name" TEXT NOT NULL,

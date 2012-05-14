@@ -10,10 +10,14 @@ sys.path.insert(0, "./lib")
 import re
 import pickle
 import urllib2
+from time import sleep
+
 import config
 from lib.weibopy.auth import OAuthHandler
 from lib.weibopy.api import API
-from Helper import log
+import Helper
+
+log = Helper.log
 
 USER_URL_FORMAT = "http://weibo.cn/%s/info?vt=4&wm=ig_0001_index&gsid=%s"
 
@@ -23,6 +27,8 @@ class Poster():
         self.hdl = OAuthHandler(config.APP_KEY, config.APP_SECRET)
         self.api = None
         self.token = {}
+        self.last_post_time = self.get_last_post_time()
+        log("Last Post Time: %s" % self.last_post_time)
         try:
             with open(config.TOKEN_FILE) as f:
                 self.token = pickle.load(f)
@@ -65,6 +71,19 @@ class Poster():
         except:
             raise Exception("Post Status Failed!")
 
+    def run(self):
+        status = Helper.get_status(self.last_post_time)
+        log("Total %d Status" % len(status))
+        if len(status) == 0:
+            log("Already Up to Date!")
+            return
+        else:
+            for item in status:
+                gender,school,message = item
+                msg = "gender:%s school:%s message:%s" % (item)
+                self.post_status(msg)
+                sleep(2)
+
     def get_user_info(self, screen_name):
         try:
             user = {}
@@ -86,7 +105,12 @@ class Poster():
         except:
             log("Exception Caught Here.User: %s" % screen_name)
 
+    def get_last_post_time(self):
+        return Helper.get_app_value('post_time')
+
+    def set_last_post_time(self, last_post_time):
+        Helper.set_app_value('post_time', last_post_time)
+
 if __name__ == '__main__':
     poster = Poster()
-    user = poster.get_user_info("梦逝去的方向")
-    print user["school"]
+    poster.run()

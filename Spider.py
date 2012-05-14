@@ -84,7 +84,7 @@ class Spider():
         try:
             total_page_count = int(re.findall(r'<input type="submit" value="跳页" />(?:.*?)/((?:\d)+)(?:.*?)</div>', message_page)[0])
         except:
-            raise Exception("got an error!")
+            total_page_count = 1
         log("TOTAL_PAGE_COUNT: %s" % total_page_count)
         page_index = 1
         conversations,_ = self.get_conversations(message_page)
