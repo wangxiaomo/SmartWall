@@ -10,7 +10,7 @@ help:
 .PHONY:init init_db clean clean_all
 
 init:
-	$(MAKE) clean
+	$(MAKE) clean_all
 	$(ECHO) "Init The App"
 	$(PYTHON) init.py
 
