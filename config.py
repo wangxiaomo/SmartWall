@@ -22,5 +22,5 @@ TOKEN_FILE = ".tokens"
 
 
 # Please Change These!
-USERNAME = 'wxm4ever@yeah.net'
-PASSWORD = '123123123'
+USERNAME = 'hitsecret@163.com'
+PASSWORD = 'hitmimi123'

@@ -1,2 +1,0 @@
-*/11 * * * * python /home/xiaomo/project/SmartWall/Spider.py>>/home/xiaomo/project/SmartWall/spider.log
-*/12 * * * * python /home/xiaomo/project/SmartWall/Poster.py>>/home/xiaomo/project/SmartWall/poster.log

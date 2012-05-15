@@ -4,8 +4,8 @@
 Poster: 发布微博。
 """
 
-import sys
-sys.path.insert(0, "./lib")
+import sys,os
+sys.path.insert(0, os.getcwd()+"/lib/")
 
 import re
 import pickle
