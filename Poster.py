@@ -71,6 +71,7 @@ class Poster():
         except:
             #raise Exception("Post Status Failed!")
             log("Post Status:%s Failed!" % status)
+            raise
 
     def run(self):
         status = Helper.get_status(self.last_post_time)
@@ -83,7 +84,7 @@ class Poster():
                 gender,school,message = item
                 msg = "gender:%s school:%s message:%s" % (item)
                 self.post_status(msg)
-                sleep(2)
+                sleep(5)
 
     def get_user_info(self, screen_name):
         try:

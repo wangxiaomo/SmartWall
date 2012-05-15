@@ -74,7 +74,6 @@ def save_2_sqlite(messages):
             continue
         sql = "INSERT INTO sw_messages(src,dst,message,pub_time) VALUES('%s', '%s', '%s', '%s')" % \
             (message["src"], message["dst"], message["message"], message["time"])
-        log(sql)
         db.do_sql(sql)
 
     log("%d messages existed!" % count)

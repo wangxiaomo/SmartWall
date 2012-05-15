@@ -20,8 +20,11 @@ init_db:
 
 clean:
 	$(RM) *.pyc
+	$(RM) *.log
+	$(RM) cron_file
 
 clean_all:
+	$(MAKE) clean
 	$(RM) .messages
 	$(RM) .gsid
 	$(RM) .tokens
