@@ -5,7 +5,7 @@ Poster: 发布微博。
 """
 
 import sys,os
-sys.path.insert(0, os.getcwd()+"/lib/")
+sys.path.insert(0, os.getcwd()+"/lib")
 
 import re
 import pickle
@@ -13,8 +13,8 @@ import urllib2
 from time import sleep
 
 import config
-from lib.weibopy.auth import OAuthHandler
-from lib.weibopy.api import API
+from weibopy.auth import OAuthHandler
+from weibopy.api import API
 import Helper
 
 log = Helper.log
