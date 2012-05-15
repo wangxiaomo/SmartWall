@@ -57,3 +57,4 @@ update:2012/05/15 by xiaomo
 update:2012/05/15 by xiaomo
 TODO FIX:
     1.私信字数限制
+    2.时间不确定导致私信重复。暂时先忽略重复问题

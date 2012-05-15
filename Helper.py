@@ -56,8 +56,8 @@ def get_status(last_post_time):
     
 
 def is_message_exists(message):
-    sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s' AND pub_time='%s'" % \
-        (message["src"], message["dst"], message["message"], message["time"])
+    sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s'" % \
+        (message["src"], message["dst"], message["message"])
     db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
     if rows:
