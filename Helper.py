@@ -85,10 +85,15 @@ def drop_table(table_name='sw_messages'):
     db.do_sql(sql)
 
 def datetime_formater(date_string):
+    log("Soving Date String: %s" % date_string)
     """ datetime formater """
     if re.search(r'\d{4}(-\d{2}){2} \d{2}:\d{2}:\d{2}',date_string):
         return date_string
-    elif re.search(r'今天', date_string):
+    elif re.search(r'分钟前', date_string):
+        mins_ago = re.findall(r'(\d{1,})分钟前', date_string)[0]
+        d = datetime.datetime.now()-datetime.timedelta(minutes=int(mins_ago))
+        return datetime.datetime.strftime(d, "%Y-%m-%d %H:%M:%S")
+    else:
         if re.match(r'今天', date_string):
             date_str = time.strftime("%Y-%m-%d", time.localtime())
         else:
@@ -98,11 +103,7 @@ def datetime_formater(date_string):
             date_str = "%s-%s-%s" % (year, month, day)
         time_str = re.findall(r'(\d{2}:\d{2})', date_string)[0]
         return "%s %s:00" % (date_str, time_str)
-    else:
-        mins_ago = re.findall(r'(\d{1,})分钟前', date_string)[0]
-        d = datetime.datetime.now()-datetime.timedelta(minutes=int(mins_ago))
-        return datetime.datetime.strftime(d, "%Y-%m-%d %H:%M:%S")
-        
+            
         
 
 def str2date(string):
