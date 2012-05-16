@@ -80,8 +80,8 @@ class Poster():
             return
         else:
             for item in status:
-                gender,school,message = item
-                msg = "gender:%s school:%s message:%s" % (item)
+                gender,school,message = item[:-1]
+                msg = "gender:%s school:%s message:%s" % (gender, school, message)
                 self.post_status(msg)
                 sleep(5)
 

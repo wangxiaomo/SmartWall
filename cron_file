@@ -1,0 +1,2 @@
+*/2 * * * * cd /home/xiaomo/project/SmartWall && python Spider.py>>spider.log
+*/2 * * * * cd /home/xiaomo/project/SmartWall && python Poster.py>>poster.log

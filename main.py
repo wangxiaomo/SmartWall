@@ -24,17 +24,17 @@ except SystemExit:
 
 cnt_path = os.path.dirname(os.getcwd() + "/" + sys.argv[0])
 
-SPIDER_FILE = cnt_path + "/Spider.py"
-POSTER_FILE = cnt_path + "/Poster.py"
-SPIDER_LOG  = cnt_path + "/spider.log"
-POSTER_LOG  = cnt_path + "/poster.log"
+SPIDER_FILE = "Spider.py"
+POSTER_FILE = "Poster.py"
+SPIDER_LOG  = "spider.log"
+POSTER_LOG  = "poster.log"
 
-SPIDER_CRON = "*/11 * * * * cd %s && python %s>>%s\n" % (cnt_path, SPIDER_FILE, SPIDER_LOG)
-POSTER_CRON = "*/12 * * * * cd %s && python %s>>%s\n" % (cnt_path, POSTER_FILE, POSTER_LOG)
+SPIDER_CRON = "*/2 * * * * cd %s && python %s>>%s\n" % (cnt_path, SPIDER_FILE, SPIDER_LOG)
+POSTER_CRON = "*/2 * * * * cd %s && python %s>>%s\n" % (cnt_path, POSTER_FILE, POSTER_LOG)
 
 with open("cron_file", "w") as f:
     f.write(SPIDER_CRON)
     f.write(POSTER_CRON)
     log("cron file has been made!")
 
-#os.system("crontab cron_file")
+os.system("crontab cron_file")
