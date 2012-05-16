@@ -132,9 +132,10 @@ class Spider():
         ret = []
         for conversation in conversations:
             item = {}
-            tokens = re.findall(r'(.*?)<span', conversation)[0]
+            tokens = re.findall(r'(.*?)<span class="ct">', conversation)[0]
             tokens = re.sub(r'<(?:.*?)>', '', tokens) # 去除html标记
             tokens = re.sub(r'\[(在线|忙碌|离开)\]', '', tokens) # 去除在线标记
+            tokens = re.sub(r'\[\d+条新\]', '', tokens)
             tokens = re.split(r'&nbsp;', tokens)
             latest = tokens[3]
             latest = re.split(r':', latest)[1]
@@ -161,6 +162,7 @@ class Spider():
             tokens = re.findall(r'(.*?)<span', conversation)[0]
             tokens = re.sub(r'<(?:.*?)>', '', tokens) # 去除html标记
             tokens = re.sub(r'\[(在线|忙碌|离开)\]', '', tokens) # 去除在线标记
+            tokens = re.sub(r'\[\d+条新\]', '', tokens)
             tokens = re.split(r':', tokens)
             people = tokens[0]
             message = tokens[1]
