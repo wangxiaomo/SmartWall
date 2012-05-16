@@ -77,4 +77,4 @@ class Spider:
         urllibe2.install_opener(self.opener)
 
 if __name__ == '__main__':
-    s = Spider('497052184@qq.com', 'Wj2201367')
+    s = Spider('xxx', 'xxx')
