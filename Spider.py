@@ -138,7 +138,7 @@ class Spider():
             tokens = re.sub(r'\[\d+条新\]', '', tokens)
             tokens = re.split(r'&nbsp;', tokens)
             latest = tokens[3]
-            latest = re.split(r':', latest)[1]
+            latest = re.split(r':', latest, 1)[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
             time = Helper.datetime_formater(time)
             cnt_datetime = Helper.str2date(time)
@@ -163,7 +163,7 @@ class Spider():
             tokens = re.sub(r'<(?:.*?)>', '', tokens) # 去除html标记
             tokens = re.sub(r'\[(在线|忙碌|离开)\]', '', tokens) # 去除在线标记
             tokens = re.sub(r'\[\d+条新\]', '', tokens)
-            tokens = re.split(r':', tokens)
+            tokens = re.split(r':', tokens, 1)
             people = tokens[0]
             message = tokens[1]
             time = re.findall(r'<span class="ct">(.*?)</span>', conversation)[0]
