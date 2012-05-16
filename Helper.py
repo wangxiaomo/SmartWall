@@ -58,7 +58,6 @@ def get_status(last_post_time):
         log(sql)
         db.do_sql(sql)
     return rows
-    
 
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s'" % \
@@ -107,8 +106,6 @@ def datetime_formater(date_string):
             date_str = "%s-%s-%s" % (year, month, day)
         time_str = re.findall(r'(\d{2}:\d{2})', date_string)[0]
         return "%s %s:00" % (date_str, time_str)
-            
-        
 
 def str2date(string):
     return datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
