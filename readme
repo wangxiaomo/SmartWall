@@ -36,7 +36,8 @@ update:2012/05/11 by oangeor
             2.先让它运行起来.关于分析的东西慢慢加或者说根据情况加.
 
 update:2012/05/12 by xiaomo
-TODO: Fix 2级递归搜索..
+TODO Fix:
+    1.2级递归搜索..
 
 update:2012/05/14 by xiaomo
 version1. 最近有点紧啊.ps.杨春程那个混蛋貌似比我还忙的样子.总之先把第一版本搞出来再说.
@@ -58,3 +59,8 @@ update:2012/05/15 by xiaomo
 TODO FIX:
     1.私信字数限制
     2.时间不确定导致私信重复。暂时先忽略重复问题
+
+update:2012/05/18 by xiaomo
+TODO FIX:
+    1.学校机构的提取.(面向多个学校的树洞)
+    2.发送队列.
