@@ -46,7 +46,6 @@ def add_user(user):
 
 def get_status(last_post_time):
     sql = "SELECT sex,school,message,pub_time FROM sw_messages,sw_users WHERE src!='%s' AND src=screen_name AND user_id NOT IN (SELECT user_id FROM sw_blacklist) AND pub_time>'%s' ORDER BY pub_time" % ('我'.decode('utf-8'),last_post_time)
-    log(sql)
     db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
     # write the time back

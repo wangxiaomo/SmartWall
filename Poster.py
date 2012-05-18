@@ -71,6 +71,7 @@ class Poster():
         except:
             #raise Exception("Post Status Failed!")
             log("Post Status:%s Failed!" % status)
+        log("Post Status:%s Success!" % status)
 
     def run(self):
         status = Helper.get_status(self.last_post_time)
