@@ -18,4 +18,8 @@ CREATE TABLE "sw_users" (
     "sex" TEXT NOT NULL,
     "school" TEXT NOT NULL
 );
+--create black list table
+CREATE TABLE "sw_blacklist" (
+    "user_id" TEXT NOT NULL
+);
 COMMIT;

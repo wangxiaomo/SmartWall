@@ -45,14 +45,13 @@ def add_user(user):
         return False
 
 def get_status(last_post_time):
-    sql = "SELECT sex,school,message,pub_time FROM sw_messages,sw_users WHERE src!='%s' AND src=screen_name AND pub_time>'%s' ORDER BY pub_time" % ('我'.decode('utf-8'),last_post_time)
+    sql = "SELECT sex,school,message,pub_time FROM sw_messages,sw_users WHERE src!='%s' AND src=screen_name AND user_id NOT IN (SELECT user_id FROM sw_blacklist) AND pub_time>'%s' ORDER BY pub_time" % ('我'.decode('utf-8'),last_post_time)
     log(sql)
     db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
     # write the time back
     #now = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S") 
     #sql = "UPDATE sw_app SET cfg_value='%s' WHERE cfg_name='post_time'" % now
-    print rows
     if len(rows):
         sql = "UPDATE sw_app SET cfg_value='%s' WHERE cfg_name='post_time'" % rows[-1][3]
         log(sql)
@@ -62,6 +61,16 @@ def get_status(last_post_time):
 def is_message_exists(message):
     sql = "SELECT * FROM sw_messages WHERE src='%s' AND dst='%s' AND message='%s'" % \
         (message["src"], message["dst"], message["message"])
+    db = SQLite(config.DB_FILE)
+    rows = db.fetch_sql(sql)
+    if rows:
+        return True
+    else:
+        return False
+
+def is_user_in_blacklist(screen_name):
+    sql = "SELECT * FROM sw_users,sw_blacklist WHERE sw_users.user_id=sw_blacklist.user_id " \
+          "AND screen_name='%s';" % screen_name
     db = SQLite(config.DB_FILE)
     rows = db.fetch_sql(sql)
     if rows:
