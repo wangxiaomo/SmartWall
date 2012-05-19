@@ -64,3 +64,7 @@ update:2012/05/18 by xiaomo
 TODO FIX:
     1.学校机构的提取.(面向多个学校的树洞)
     2.发送队列.
+
+update:2012/05/19 by xiaomo
+FIXED BUG:
+    1.二级递归搜索.

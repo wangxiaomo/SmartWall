@@ -115,10 +115,9 @@ class Spider():
             for i in range(int(conversation["count"])/10+1):
                 message_page = self._request(BASE_URL+detail+"&page=%d" % (i+1)).read()
                 cnt_pages_messages,status = self.get_messages(message_page, peoples)
+                messages.extend(cnt_pages_messages)
                 if status:
                     break
-                else:
-                    messages.extend(cnt_pages_messages)
         self.set_last_message_time(self.latest_time)
         log("Final Message Count %d" % len(messages))
         Helper.save_2_sqlite(messages)
