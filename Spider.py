@@ -109,8 +109,8 @@ class Spider():
             user = conversation["p2"] if conversation["p1"] == '我' else conversation["p1"]
             user_info = poster.get_user_info(user)
             flag = Helper.add_user(user_info)
-            if flag == False:
-                #self.post(user, config.WELCOME)
+            if flag == True:
+                self.post(user, config.WELCOME)
                 pass
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
