@@ -109,7 +109,7 @@ class Spider():
             user_info = poster.get_user_info(user)
             flag = Helper.add_user(user_info)
             if flag == False:
-                continue
+                self.post(user, config.WELCOME)
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
             for i in range(int(conversation["count"])/10+1):
@@ -191,6 +191,28 @@ class Spider():
 
     def set_last_message_time(self, timestr):
         Helper.set_app_value('message_time', timestr)
+
+    def post(self, nickname, content):
+        message_url="http://weibo.cn/msg/chat/send?rl=0&vt=4&gsid=3_5bc4e34f185bf963100447ae5969df46b6eadc63"
+        message_page = self._request(message_url).read()
+        parser = HTMLParser.HTMLParser()
+        try:
+            if re.search(r'form action', message_page):
+                submit_url = BASE_URL + "/"+parser.unescape(re.findall(r'form action="(.*?)"', message_page)[0])
+            else:
+                submit_url = BASE_URL+"/"+parser.unescape(re.findall(r'go href="(.*?)"', message_page)[0])
+        except:
+            raise Exception("can not get the submit url.")
+        post_data = {}
+        post_data["rl"]=0
+        post_data["act"]="send"
+        post_data["nick"] = nickname
+        post_data["content"] = content
+        post_data["submit"] = 1
+        post_data["attachment"]=""
+        post_url="http://weibo.cn/msg/do/post?vt=4&amp;gsid=3_5bc4e34f185bf963100447ae5969df46b6eadc63"
+        
+        page_send = self._request(submit_url, post_data).read()
 
 if __name__ == '__main__':
     s = Spider()

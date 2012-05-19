@@ -24,3 +24,5 @@ TOKEN_FILE = ".tokens"
 # Please Change These!
 USERNAME = 'wxm4ever@yeah.net'
 PASSWORD = '123123123'
+
+WELCOME = '欢迎使用@大学秘密.如果觉得好用的话，请推荐给您的好友.谢谢'
