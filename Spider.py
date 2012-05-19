@@ -80,7 +80,6 @@ class Spider():
     def run(self):
         message_url = "http://weibo.cn/msg/chat/list?tf=5_010&vt=4&gsid=%s" % self.gsid
         message_page = self._request(message_url).read()
-        #TODO:
         try:
             total_page_count = int(re.findall(r'<input type="submit" value="跳页" />(?:.*?)/((?:\d)+)(?:.*?)</div>', message_page)[0])
         except:
@@ -113,8 +112,13 @@ class Spider():
                 continue
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
-            message_page = self._request(BASE_URL+detail).read()
-            messages.extend(self.get_messages(message_page, peoples))
+            for i in range(int(conversation["count"])/10+1):
+                message_page = self._request(BASE_URL+detail+"&page=%d" % (i+1)).read()
+                cnt_pages_messages,status = self.get_messages(message_page, peoples)
+                if status:
+                    break
+                else:
+                    messages.extend(cnt_pages_messages)
         self.set_last_message_time(self.latest_time)
         log("Final Message Count %d" % len(messages))
         Helper.save_2_sqlite(messages)
@@ -146,7 +150,7 @@ class Spider():
                 status = 1
                 return ret,status
             detail = re.findall(r'语音通话(?:.*?)<a href="(.*?)" class="cc">(?:.*?)</a>', conversation)[0]
-            detail = parser.unescape(detail)
+            detail = parser.unescape(detail)+"&type=record"
             count = re.findall(r'共(\d+)条对话', conversation)[0]
             item.update(dict(p1=tokens[0],p2=tokens[2],latest=latest,time=time,detail=detail,count=count))
             ret.append(item)
@@ -154,8 +158,9 @@ class Spider():
         return ret,status
 
     def get_messages(self, html, peoples):
+        status = 0
         conversations = re.findall("<div class=\"c\">(.*?)</div>", html)
-        conversations = conversations[1:-3]
+        conversations = conversations[2:-3]
         ret = []
         for conversation in conversations:
             msg = {}
@@ -170,7 +175,8 @@ class Spider():
             time = Helper.datetime_formater(time)
             cnt_datetime = Helper.str2date(time)
             if not cnt_datetime>self.last_time:
-                return ret
+                status = 1
+                return ret,status
             if people == peoples[0]:
                 msg["dst"] = peoples[1]
             else:
@@ -179,7 +185,7 @@ class Spider():
             msg["message"] = Helper.sql_escape(message)
             msg["time"] = time
             ret.append(msg)
-        return ret
+        return ret, status
 
     def get_last_message_time(self):
         return Helper.str2date(Helper.get_app_value('message_time'))

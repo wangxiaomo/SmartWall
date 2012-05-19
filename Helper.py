@@ -5,7 +5,10 @@ import config
 from lib.SQLite import SQLite
 
 def log(mesg):
-    print mesg.encode("utf-8")
+    try:
+        print mesg.encode("utf-8")
+    except:
+        print mesg
 
 def sql_escape(string):
     return string.replace('\\', '\\\\').replace('\'', '\'\'')
