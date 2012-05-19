@@ -29,8 +29,8 @@ POSTER_FILE = "Poster.py"
 SPIDER_LOG  = "spider.log"
 POSTER_LOG  = "poster.log"
 
-SPIDER_CRON = "*/2 * * * * cd %s && python %s>>%s\n" % (cnt_path, SPIDER_FILE, SPIDER_LOG)
-POSTER_CRON = "*/2 * * * * cd %s && python %s>>%s\n" % (cnt_path, POSTER_FILE, POSTER_LOG)
+SPIDER_CRON = "*/1 * * * * cd %s && python %s>>%s\n" % (cnt_path, SPIDER_FILE, SPIDER_LOG)
+POSTER_CRON = "*/1 * * * * cd %s && python %s>>%s\n" % (cnt_path, POSTER_FILE, POSTER_LOG)
 
 with open("cron_file", "w") as f:
     f.write(SPIDER_CRON)
