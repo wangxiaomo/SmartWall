@@ -1,0 +1,7 @@
+#-*- coding: utf-8 -*-
+
+# APPLICATION
+ALERT_MAX_TIMES = 3
+
+APP_KEY = "2986120742"
+APP_SECRET = "796b90d5a6e3a1cc4d719726f5f99f7d"

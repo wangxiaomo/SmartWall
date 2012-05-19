@@ -1,0 +1,8 @@
+1.对于官方sdk的修改。
+    遇到time data ” does not match format ‘%a %b %d %H:%M:%S +0800 %Y’这个问题.原因是官方未正确作出异常处理.
+  修改方法:
+    修改weibopy/utils.py中的parse_datetime函数。加入异常处理。
+  try:
+    return datetime(*(time.strptime(...))
+  except:
+    return datetime.now()
