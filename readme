@@ -68,3 +68,7 @@ TODO FIX:
 update:2012/05/19 by xiaomo
 FIXED BUG:
     1.二级递归搜索.
+
+update:2012/05/19 by xiaomo
+ADD FEATURE:
+    1.检查私信是否被吞. ps.测试1周后正式集合进去。
