@@ -1,27 +1,30 @@
 #-*- coding: utf-8 -*-
 
-import sys
+import os
 import pickle
 from time import sleep
 
-from config import *
+import config
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
 from writer import Writer
+
+ALERT_MAX_TIMES = 3
 
 class WeiboBackup(object):
     """
     新浪微博自动备份.
     """
     def __init__(self):
-        self.hdl = OAuthHandler(APP_KEY, APP_SECRET)
+        self.hdl = OAuthHandler(config.APP_KEY, config.APP_SECRET)
         self.api = None
         self.writer = None
         self.token  = {}
+        self.auth()
 
     def auth(self):
         try:
-            with open(".tokens") as f:
+            with open("../"+config.TOKEN_FILE) as f:
                 self.token = pickle.load(f)
             self.hdl.setToken(
                 self.token["key"],
@@ -62,14 +65,20 @@ class WeiboBackup(object):
                 print e
             
 
-    def backup(self, screen_name, filename):
-        self.writer = Writer(filename)
+    def backup(self, screen_name, filename=""):
+        if filename:
+            self.writer = Writer(filename)
+        else:
+            self.writer = []
         page,alert_num = 1,0
         while alert_num<ALERT_MAX_TIMES:
             page = self.get_data(screen_name, page)
             alert_num += 1
+        return self.writer
 
 if __name__ == '__main__':
     obj = WeiboBackup()
     obj.auth()
-    obj.backup(sys.argv[1], sys.argv[2])
+    path = os.getcwd()
+
+    obj.backup(sys.argv[1], path+"/"+sys.argv[2])

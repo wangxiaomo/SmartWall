@@ -23,12 +23,12 @@ class SQLite():
             self.conn.execute(sql)
             self.conn.commit()
         except:
-            raise Exception("do sql: %s" % sql)
+            raise
 
     def fetch_sql(self, sql):
         try:
             self.cursor.execute(sql)
         except:
-            raise Exception("fetch sql: %s" % sql)
+            raise
         return self.cursor.fetchall()
 

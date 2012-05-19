@@ -69,6 +69,15 @@ def is_message_exists(message):
     else:
         return False
 
+def is_status_exists(status):
+    sql = "SELECT * FROM sw_messages WHERE message='%s';" % status
+    db = SQLite(sql)
+    rows = db.fetch_sql(sql)
+    if rows:
+        return True
+    else:
+        return False
+
 def save_2_sqlite(messages):
     db = SQLite(config.DB_FILE)
     count = 0
