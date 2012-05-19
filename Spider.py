@@ -86,7 +86,8 @@ class Spider():
             total_page_count = 1
         log("TOTAL_PAGE_COUNT: %s" % total_page_count)
         page_index = 1
-        conversations,_ = self.get_conversations(message_page)
+        conversations,status = self.get_conversations(message_page)
+        log("[IM]:TOTAL CONVERSATIONS:%d STATUS:%d" % (len(conversations), status))
         if len(conversations) == 0:
             log("Already up to date")
             return
@@ -109,7 +110,8 @@ class Spider():
             user_info = poster.get_user_info(user)
             flag = Helper.add_user(user_info)
             if flag == False:
-                self.post(user, config.WELCOME)
+                #self.post(user, config.WELCOME)
+                pass
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
             for i in range(int(conversation["count"])/10+1):
@@ -193,7 +195,7 @@ class Spider():
         Helper.set_app_value('message_time', timestr)
 
     def post(self, nickname, content):
-        message_url="http://weibo.cn/msg/chat/send?rl=0&vt=4&gsid=3_5bc4e34f185bf963100447ae5969df46b6eadc63"
+        message_url="http://weibo.cn/msg/chat/send?rl=0&vt=4&gsid=%s" % self.gsid
         message_page = self._request(message_url).read()
         parser = HTMLParser.HTMLParser()
         try:
@@ -210,7 +212,7 @@ class Spider():
         post_data["content"] = content
         post_data["submit"] = 1
         post_data["attachment"]=""
-        post_url="http://weibo.cn/msg/do/post?vt=4&amp;gsid=3_5bc4e34f185bf963100447ae5969df46b6eadc63"
+        post_url="http://weibo.cn/msg/do/post?vt=4&amp;gsid=%s" % self.gsid
         
         page_send = self._request(submit_url, post_data).read()
 
