@@ -12,7 +12,7 @@ from weibo_backup.run import WeiboBackup
 
 parser = HTMLParser.HTMLParser()
 
-sql = "SELECT message FROM sw_messages"
+sql = "SELECT message FROM sw_messages WHERE src!='我'"
 db = SQLite("../"+config.DB_FILE)
 rows = db.fetch_sql(sql)
 total_status = [parser.unescape(r[0]) for r in rows]
@@ -25,7 +25,13 @@ Helper.log("Total %d Status Posted!" % len(post_status))
 diff = [w for w in total_status if w not in post_status]
 Helper.log("%d Status Swallowed!" % len(diff))
 
+"""
 from Poster import Poster
 poster = Poster()
 for w in diff:
     poster.post_status(w)
+"""
+
+with open("log", "w") as f:
+    for w in diff:
+        f.write(w.encode("utf-8")+"\n")

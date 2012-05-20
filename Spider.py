@@ -110,7 +110,7 @@ class Spider():
             user_info = poster.get_user_info(user)
             flag = Helper.add_user(user_info)
             if flag == True:
-                self.post(user, config.WELCOME)
+                #self.post(user, config.WELCOME)
                 pass
             peoples = [conversation["p1"],conversation["p2"]]
             detail = conversation["detail"]
