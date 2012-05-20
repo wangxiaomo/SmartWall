@@ -46,6 +46,16 @@ def add_user(user):
     else:
         return False
 
+def add_command_log(screen_name, command, text, time):
+    sql = "INSERT INTO sw_log(screen_name,command,text, time) VALUES('%s', '%s', '%s', '%s');" % (screen_name, command, text, time)
+    db = SQLite(config.DB_FILE)
+    db.do_sql(sql)
+
+def refresh_at_time():
+    sql = "UPDATE sw_app SET cfg_value=(SELECT time FROM sw_log ORDER BY time DESC LIMIT 1) WHERE cfg_name='at_time';"
+    db = SQLite(config.DB_FILE)
+    db.do_sql(sql)
+
 def get_status(last_post_time):
     sql = "SELECT sex,school,message,pub_time FROM sw_messages,sw_users WHERE src!='%s' AND src=screen_name AND pub_time>'%s' ORDER BY pub_time" % ('我'.decode('utf-8'),last_post_time)
     db = SQLite(config.DB_FILE)

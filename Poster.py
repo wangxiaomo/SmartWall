@@ -80,13 +80,13 @@ class Poster():
         log("Total %d Status" % len(status))
         if len(status) == 0:
             log("Already Up to Date!")
-            return
         else:
             for item in status:
                 gender,school,message = item[:-1]
                 msg = "%s" % (message,)
                 self.post_status(msg)
                 sleep(5)
+        self.get_usercommand()
 
     def get_user_info(self, screen_name):
         try:
@@ -109,11 +109,47 @@ class Poster():
         except:
             log("Exception Caught Here.User: %s" % screen_name)
 
+    def get_usercommand(self):
+        self.last_at_time = self.get_last_at_time()
+        log("LAST_AT_TIME:%s" % self.last_at_time)
+        self.last_at_time = Helper.str2date(self.last_at_time)
+        try:
+            list = self.api.mentions(5) #TODO: 5不靠谱.
+            for listat in list:
+                if listat.created_at>self.last_at_time:
+                    if "zf@大学秘密".decode("utf-8") in listat.text:
+                        log("ReceiveCommand %s From %s!" % \
+                            (listat.user.name, "zf"))
+                        Helper.add_command_log(listat.user.name, "zf", listat.text, str(listat.created_at))
+                        retid = listat.retweeted_status.id
+                        self.repost_message(retid)
+                    else:
+                        log("ReceiveUnknownCommand.Text:%s" % listat.text)
+                else:
+                    break
+        except:
+            log("Get User Command Except Exception!")
+        Helper.refresh_at_time()
+        
+    def repost_message(self, repid):
+        try:
+            self.api.repost(id=repid)
+        except:
+            log("Repost Failed.REPOST_ID:%s" % repid)
+        else:
+            log("Repost Success.REPOST_ID:%s" % repid)
+
     def get_last_post_time(self):
         return Helper.get_app_value('post_time')
 
     def set_last_post_time(self, last_post_time):
         Helper.set_app_value('post_time', last_post_time)
+
+    def get_last_at_time(self):
+        return Helper.get_app_value('at_time')
+
+    def set_last_at_time(self, last_at_time):
+        Helper.set_app_value('at_time', last_at_time)
 
 if __name__ == '__main__':
     poster = Poster()
