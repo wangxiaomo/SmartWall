@@ -6,6 +6,7 @@ Poster: 发布微博。
 
 import sys
 sys.path.insert(0, "./lib")
+sys.stderr = sys.stdout
 
 import re
 import pickle
@@ -76,6 +77,7 @@ class Poster():
             log("Post Status:%s Success!" % status)
 
     def run(self):
+        """
         status = Helper.get_status(self.last_post_time)
         log("Total %d Status" % len(status))
         if len(status) == 0:
@@ -86,6 +88,7 @@ class Poster():
                 msg = "%s" % (message,)
                 self.post_status(msg)
                 sleep(5)
+        """
         self.get_usercommand()
 
     def get_user_info(self, screen_name):
@@ -117,7 +120,7 @@ class Poster():
             list = self.api.mentions(5) #TODO: 5不靠谱.
             for listat in list:
                 if listat.created_at>self.last_at_time:
-                    if "zf@大学秘密".decode("utf-8") in listat.text:
+                    if "zf@0904201".decode("utf-8") in listat.text:
                         log("ReceiveCommand %s From %s!" % \
                             (listat.user.name, "zf"))
                         Helper.add_command_log(listat.user.name, "zf", listat.text, str(listat.created_at))
@@ -126,9 +129,11 @@ class Poster():
                     else:
                         log("ReceiveUnknownCommand.Text:%s" % listat.text)
                 else:
+                    log("Break Loop at %s" % str(listat.created_at))
                     break
         except:
             log("Get User Command Except Exception!")
+            raise
         Helper.refresh_at_time()
         
     def repost_message(self, repid):

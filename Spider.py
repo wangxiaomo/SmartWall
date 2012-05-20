@@ -4,6 +4,9 @@ BASE_URL = "http://weibo.cn"
 LOGIN_BASE = "http://3g.sina.com.cn/prog/wapsite/sso"
 LOGIN_URL = "http://3g.sina.com.cn/prog/wapsite/sso/login.php?backURL=http%3A%2F%2Fweibo.cn%2F%3Fgotoreg%3D1%26from%3Dindex%26s2w%3Dindex%26pos%3D103&backTitle=%D0%C2%C0%CB%CE%A2%B2%A9&vt=4&revalid=2&ns=1"
 
+import sys
+sys.stderr = sys.stdout
+
 import re,HTMLParser
 import urllib, urllib2
 import config
