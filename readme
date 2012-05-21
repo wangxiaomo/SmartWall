@@ -79,3 +79,8 @@ ADD FEATURE:
     2.zf命令正式启用
 TOBE FIX:
     1.评论中 zf 不能用
+
+update:2012/05/21 by xiaomo
+正式迁移到 OpenSalonOfHIT 上
+TOBE FIX:
+    1.多次转发原始微博会使原微博发送N次
