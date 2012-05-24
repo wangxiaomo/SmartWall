@@ -124,7 +124,10 @@ class Poster():
                         log("ReceiveCommand %s From %s!" % \
                             (listat.user.name, "zf"))
                         Helper.add_command_log(listat.user.name, "zf", listat.text, str(listat.created_at))
-                        retid = listat.retweeted_status.id
+                        try:
+                            retid = listat.retweeted_status.id
+                        except:
+                            retid = listat.id
                         self.repost_message(retid)
                     else:
                         log("ReceiveUnknownCommand.Text:%s" % listat.text)
