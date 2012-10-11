@@ -84,3 +84,6 @@ update:2012/05/21 by xiaomo
 正式迁移到 OpenSalonOfHIT 上
 TOBE FIX:
     1.多次转发原始微博会使原微博发送N次
+
+update:2012/10/11 by xiaomo
+checkout -b develop and 重构
